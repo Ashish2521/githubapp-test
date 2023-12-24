@@ -1,0 +1,29 @@
+name: Print Repo Details
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch: {}
+
+jobs:
+  print-repo-details:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Python script
+        run: python path/to/your/script.py
+          env:
+            APP_ID: ${{ secrets.APP_ID }}
+            INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
+            PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
