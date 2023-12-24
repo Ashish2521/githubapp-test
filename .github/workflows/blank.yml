@@ -29,4 +29,3 @@ jobs:
         env:
           APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
           APP_ID: ${{ secrets.APP_ID }}
-          INSTALLATION_ID: ${{ github.event.client_payload.installation_id }}
