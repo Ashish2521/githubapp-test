@@ -7,7 +7,12 @@ def print_repo_details(app_id, private_key):
 
     try:
         # Authenticate as the GitHub App using PyGithub
-        g = Github(base_url="https://api.github.com", login_or_token=app_id, private_key=private_key)
+        g = Github(base_url="https://api.github.com", login_or_token=app_id)
+        installation = g.get_app_installation(organization="Ashish2521", repository="githubapp-test")
+        access_token = installation.create_access_token()
+
+        # Initialize a new Github instance using the access token
+        g = Github(base_url="https://api.github.com", login_or_token=access_token.token)
 
         # Get repository information
         repo = g.get_repo("Ashish2521/githubapp-test")
