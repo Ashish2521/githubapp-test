@@ -2,7 +2,8 @@ import os
 import requests
 import jwt
 import time
-
+from jwt import JWT, jwk_from_pem
+import sys
 
 def generate_jwt(app_id, private_key):
     now = int(time.time())
@@ -12,8 +13,7 @@ def generate_jwt(app_id, private_key):
         'iss': app_id
     }
 
-    jwt_instance = JWT()
-    encoded_jwt = jwt_instance.encode(payload, private_key, alg='RS256')
+    encoded_jwt = jwt.encode(payload, private_key, algorithm='RS256')
 
     return encoded_jwt
 
