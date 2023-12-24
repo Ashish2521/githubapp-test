@@ -21,6 +21,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           pip install jwt
+          pip install PyJWT
 
       - name: Run Python Script
         run: |
