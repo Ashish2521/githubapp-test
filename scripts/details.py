@@ -18,8 +18,9 @@ def generate_jwt(app_id, private_key):
 def print_repo_details(app_id, private_key):
     # Authenticate as the GitHub App
     jwt_token = generate_jwt(app_id, private_key)
+    github_token = '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'
     headers = {
-        "Authorization": f"Bearer {jwt_token}",
+        "Authorization": f"Bearer {github_token}",
         "Accept": "application/vnd.github.v3+json",
     }
 
