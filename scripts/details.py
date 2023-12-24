@@ -1,6 +1,5 @@
 import os
 import requests
-import jwt
 import time
 from jwt import JWT, jwk_from_pem
 import sys
