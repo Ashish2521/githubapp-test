@@ -18,14 +18,13 @@ def generate_jwt(app_id, private_key):
 def print_repo_details(app_id, private_key):
     # Authenticate as the GitHub App
     jwt_token = generate_jwt(app_id, private_key)
-    print(f"JWT Token: {jwt_token}")
     headers = {
         "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
     }
 
     # Use the GitHub REST API to get repository information
-    repo_url = f"https://api.github.com/repositories/githubapp-test"
+    repo_url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}"
     repo_response = requests.get(repo_url, headers=headers)
     
     if repo_response.status_code == 200:
