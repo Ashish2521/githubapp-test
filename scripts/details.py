@@ -32,6 +32,7 @@ def print_repo_details(app_id, private_key):
         # Print repository name and language
         print(f"Repository Name: {repo_data['name']}")
         print(f"Repository Language: {repo_data['language']}")
+        print(f"Response body: {repo_response.text}")
     else:
         print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
 
