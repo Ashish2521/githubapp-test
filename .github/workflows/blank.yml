@@ -1,0 +1,16 @@
+name: Print Repo Name
+
+on:
+  workflow_dispatch:  # Allows manual triggering using the "Run workflow" button
+
+jobs:
+  print_repo_name:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Print Repo Name
+        run: |
+          echo "Repository Name: ${{ github.repository }}"
