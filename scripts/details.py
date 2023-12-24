@@ -5,7 +5,6 @@ import time
 
 def generate_jwt(app_id, private_key):
     now = int(time.time())
-    print(private_key)
     payload = {
         # Issued at time
         'iat': int(time.time()),
@@ -20,6 +19,9 @@ def generate_jwt(app_id, private_key):
     return encoded_jwt
 
 def print_repo_details(app_id, private_key):
+    print(f"APP_ID: {app_id}")
+    print(f"APP_PRIVATE_KEY: {private_key}")
+
     # Authenticate as the GitHub App
     jwt_token = generate_jwt(app_id, private_key)
     headers = {
