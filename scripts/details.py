@@ -5,6 +5,7 @@ import time
 
 def generate_jwt(app_id, private_key):
     now = int(time.time())
+    print(private_key)
     payload = {
         # Issued at time
         'iat': int(time.time()),
