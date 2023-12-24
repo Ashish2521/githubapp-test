@@ -2,6 +2,7 @@ import os
 import requests
 import jwt
 import time
+from jwt.algorithms import RSAAlgorithm
 
 def main():
     private_key = os.environ.get("PRIVATE_KEY")
@@ -32,7 +33,8 @@ def generate_jwt(private_key, app_id):
         'exp': now + 60,  # JWT expiration time (in seconds)
         'iss': app_id  # GitHub App identifier
     }
-    token = jwt.encode(payload, private_key, algorithm='RS256')
+    rsa_private_key = RSAAlgorithm.from_jwk(private_key)
+    token = jwt.encode(payload, rsa_private_key, algorithm='RS256')
     return token
 
 if __name__ == "__main__":
