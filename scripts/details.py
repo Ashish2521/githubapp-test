@@ -7,9 +7,7 @@ import time
 import os
 
 
-def main():
-    private_key = os.environ.get("PRIVATE_KEY")
-    app_id = int(os.environ.get("APP_ID"))
+def print_repo_details():
 
     # Authenticate as the GitHub App
     headers = {
@@ -45,9 +43,10 @@ def generate_jwt(private_key, app_id):
 
 if __name__ == "__main__":
     # Get private key and app ID from GitHub secrets
-    private_key = os.getenv("APP_PRIVATE_KEY").replace('\\n', '\n')
-    app_id = os.getenv("APP_ID")
+    private_key = os.environ.get("APP_PRIVATE_KEY").replace('\\n', '\n')
+    app_id = int(os.environ.get("APP_ID"))
 
     jwt_token = generate_jwt(private_key, app_id)
     print(f"JWT:  {jwt_token}")
+    print_repo_details()
 
