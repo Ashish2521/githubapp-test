@@ -24,7 +24,7 @@ def print_repo_details(app_id, private_key):
     }
 
     # Use the GitHub REST API to get repository information
-    repo_url = f"https://api.github.com/repositories/{os.environ['GITHUB_REPOSITORY_ID']}"
+    repo_url = f"https://api.github.com/repositories/githubapp-test"
     repo_response = requests.get(repo_url, headers=headers)
     
     if repo_response.status_code == 200:
