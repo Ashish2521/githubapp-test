@@ -26,6 +26,6 @@ jobs:
         run: |
           python scripts/details.py
         env:
-          PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+          APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
           APP_ID: ${{ secrets.APP_ID }}
           INSTALLATION_ID: ${{ github.event.client_payload.installation_id }}
