@@ -24,7 +24,7 @@ def print_repo_details(app_id, private_key):
         "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
     }
-
+    print(f"Headers: {headers}")
     # Use the GitHub REST API to get repository information
     repo_url = f"https://api.github.com/repos/Ashish2521/githubapp-test"
     repo_response = requests.get(repo_url, headers=headers)
