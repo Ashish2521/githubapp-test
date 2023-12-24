@@ -1,8 +1,7 @@
 import os
 import requests
-from jwt import JWT, jwk_from_pem
+import jwt
 import time
-import sys
 
 def generate_jwt(app_id, private_key):
     now = int(time.time())
@@ -15,9 +14,7 @@ def generate_jwt(app_id, private_key):
         'iss': app_id
     }
 
-    # Create JWT
-    jwt_instance = JWT()
-    encoded_jwt = jwt_instance.encode(payload, private_key, alg='RS256')
+    encoded_jwt = jwt.encode(payload, private_key, algorithm='RS256')
 
     return encoded_jwt
 
@@ -46,7 +43,7 @@ def print_repo_details(app_id, private_key):
 if __name__ == "__main__":
     # Get app ID and private key from GitHub secrets
     app_id = int(os.environ.get("APP_ID"))
-    private_key = os.environ.get("APP_PRIVATE_KEY").replace('\\n', '\n')
+    private_key = os.environ.get("APP_PRIVATE_KEY")
 
     # Print repository details
     print_repo_details(app_id, private_key)

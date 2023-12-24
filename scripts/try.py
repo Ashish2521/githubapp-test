@@ -43,7 +43,7 @@ def print_repo_details(app_id, private_key):
 if __name__ == "__main__":
     # Get app ID and private key from GitHub secrets
     app_id = int(os.environ.get("APP_ID"))
-    private_key = os.environ.get("APP_PRIVATE_KEY").replace('\\n', '\n')
+    private_key = os.environ.get("APP_PRIVATE_KEY")
 
     # Print repository details
     print_repo_details(app_id, private_key)
