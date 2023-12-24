@@ -2,27 +2,24 @@ import os
 import requests
 import jwt
 import time
-from jwt.algorithms import RSAAlgorithm
 
-def generate_jwt(private_key, app_id):
+def generate_jwt(app_id, private_key):
+    now = int(time.time())
     payload = {
-        'iat': int(time.time()),  # Issued at time
-        'exp': int(time.time()) + 600,  # JWT expiration time (10 minutes maximum)
-        'iss': app_id  # GitHub App's identifier
+        'iat': now,
+        'exp': now + 600,  # JWT expiration time (10 minutes maximum)
+        'iss': app_id
     }
 
-    # Load the private key
-    rsa_private_key = RSAAlgorithm.from_pem(private_key.encode())
-
-    # Sign the JWT using the private key
-    encoded_jwt = jwt.encode(payload, rsa_private_key, algorithm='RS256')
+    encoded_jwt = jwt.encode(payload, private_key, algorithm='RS256')
 
     return encoded_jwt
 
-def print_repo_details(private_key, app_id):
+def print_repo_details(app_id, private_key):
     # Authenticate as the GitHub App
+    jwt_token = generate_jwt(app_id, private_key)
     headers = {
-        "Authorization": f"Bearer {generate_jwt(private_key, app_id)}",
+        "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
     }
 
@@ -39,10 +36,9 @@ def print_repo_details(private_key, app_id):
         print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
 
 if __name__ == "__main__":
-    # Get private key and app ID from GitHub secrets
-    private_key = os.environ.get("APP_PRIVATE_KEY").replace('\\n', '\n')
+    # Get app ID and private key from GitHub secrets
     app_id = int(os.environ.get("APP_ID"))
+    private_key = os.environ.get("APP_PRIVATE_KEY").replace('\\n', '\n')
 
-    
     # Print repository details
-    print_repo_details(private_key, app_id)
+    print_repo_details(app_id, private_key)
