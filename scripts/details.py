@@ -1,8 +1,8 @@
 import os
 import requests
+import jwt
 import time
-from jwt import JWT, jwk_from_pem
-import sys
+
 
 def generate_jwt(app_id, private_key):
     now = int(time.time())
