@@ -6,7 +6,6 @@ import time
 def main():
     private_key = os.environ.get("PRIVATE_KEY")
     app_id = int(os.environ.get("APP_ID"))
-    installation_id = int(os.environ.get("INSTALLATION_ID"))
 
     # Authenticate as the GitHub App
     headers = {
