@@ -2,7 +2,6 @@ import os
 import requests
 import jwt
 import time
-from jwt import JWT, jwk_from_pem
 import sys
 import datetime
 
@@ -42,26 +41,6 @@ def print_repo_details(app_id, private_key):
     else:
         print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
 
-def print_installation_id(app_id, private_key):
-    print(f"APP_ID: {app_id}")
-
-    # Authenticate as the GitHub App
-    jwt_token = generate_jwt(app_id, private_key)
-    headers = {
-        "Authorization": f"Bearer {jwt_token}",
-        "Accept": "application/vnd.github.v3+json",
-    }
-
-    # Use the GitHub REST API to get the list of installations
-    installations_url = "https://api.github.com/app/installations"
-    installations_response = requests.get(installations_url, headers=headers)
-
-    if installations_response.status_code == 200:
-        installations_data = installations_response.json()
-        for installation in installations_data:
-            print(f"Installation ID: {installation['id']}")
-    else:
-        print(f"Failed to retrieve installation information. Status code: {installations_response.status_code}")
 
 if __name__ == "__main__":
     # Get app ID and private key from GitHub secrets
@@ -69,6 +48,5 @@ if __name__ == "__main__":
     private_key = os.environ.get("APP_PRIVATE_KEY")
 
     # Print repository details
-    # print_repo_details(app_id, private_key)
-    print_installation_id(app_id, private_key)
+    print_repo_details(app_id, private_key)
 
