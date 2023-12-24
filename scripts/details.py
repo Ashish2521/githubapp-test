@@ -2,7 +2,10 @@ import os
 import requests
 import jwt
 import time
-from jwt.algorithms import RSAAlgorithm
+from jwt import JWT
+import time
+import os
+
 
 def main():
     private_key = os.environ.get("PRIVATE_KEY")
@@ -26,16 +29,25 @@ def main():
     else:
         print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
 
+
 def generate_jwt(private_key, app_id):
-    now = int(time.time())
     payload = {
-        'iat': now,  # Issued at time
-        'exp': now + 60,  # JWT expiration time (in seconds)
-        'iss': app_id  # GitHub App identifier
+        'iat': int(time.time()),  # Issued at time
+        'exp': int(time.time()) + 600,  # JWT expiration time (10 minutes maximum)
+        'iss': app_id  # GitHub App's identifier
     }
-    rsa_private_key = RSAAlgorithm.from_jwk(private_key)
-    token = jwt.encode(payload, rsa_private_key, algorithm='RS256')
-    return token
+
+    # Create JWT
+    jwt_instance = JWT()
+    encoded_jwt = jwt_instance.encode(payload, private_key, alg='RS256')
+
+    return encoded_jwt
 
 if __name__ == "__main__":
-    main()
+    # Get private key and app ID from GitHub secrets
+    private_key = os.getenv("APP_PRIVATE_KEY").replace('\\n', '\n')
+    app_id = os.getenv("APP_ID")
+
+    jwt_token = generate_jwt(private_key, app_id)
+    print(f"JWT:  {jwt_token}")
+
