@@ -5,7 +5,7 @@ import time
 import sys
 import datetime
 
-def generate_jwt(app_id, private_key):
+def generate_jwt(app_id, private_key_path):
     now = int(datetime.datetime.now().timestamp())
     payload = {
         "iat": now - 60,
@@ -13,15 +13,18 @@ def generate_jwt(app_id, private_key):
         "iss": app_id
     }
 
+    with open(private_key_path, "r") as key_file:
+        private_key = key_file.read()
+
     encoded_jwt = jwt.encode(payload, private_key, algorithm='RS256')
 
     return encoded_jwt
 
-def print_repo_details(app_id, private_key):
+def print_repo_details(app_id, private_key_path):
     print(f"APP_ID: {app_id}")
 
     # Authenticate as the GitHub App
-    jwt_token = generate_jwt(app_id, private_key)
+    jwt_token = generate_jwt(app_id, private_key_path)
     headers = {
         "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
@@ -58,9 +61,9 @@ def print_repo_details(app_id, private_key):
         print(f"Response body: {user_response.text}")
 
 if __name__ == "__main__":
-    # Get app ID and private key from GitHub secrets
+    # Get app ID and private key file path
     app_id = int(os.environ.get("APP_ID"))
-    private_key = os.environ.get("APP_PRIVATE_KEY")
+    private_key_path = os.path.join(os.path.dirname(__file__), "private-key.pem")  # Update with the actual file name
 
     # Print repository details
-    print_repo_details(app_id, private_key)
+    print_repo_details(app_id, private_key_path)
