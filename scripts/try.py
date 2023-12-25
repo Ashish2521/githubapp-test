@@ -52,6 +52,14 @@ def get_access_token_details():
             print(installation_data[0])
             installation_id = installation_data[0]['account']['id']
             access_token_url = f"https://api.github.com/app/installations/{app_id}/access_tokens"
+            jwt_token = generate_jwt()
+            if jwt_token is None:
+                print("Authentication failed. Check previous error messages for details.")
+                return
+            headers = {
+                "Authorization": f"Bearer {jwt_token}",
+                "Accept": "application/vnd.github.v3+json",
+            }
 
             try:
                 access_token_response = requests.get(access_token_url, headers=headers)
