@@ -49,9 +49,9 @@ def get_access_token_details():
         
         if installation_response.status_code == 200:
             installation_data = installation_response.json()
-            print(installation_data[0])
-            installation_id = installation_data[0]['account']['id']
-            access_token_url = f"https://api.github.com/app/installations/{app_id}/access_tokens"
+            installation_id = installation_data[0]['id']
+            print(installation_id)
+            access_token_url = f"https://api.github.com/app/installations/{installation_id}/access_tokens"
             jwt_token = generate_jwt()
             if jwt_token is None:
                 print("Authentication failed. Check previous error messages for details.")
