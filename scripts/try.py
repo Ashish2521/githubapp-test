@@ -29,36 +29,39 @@ def generate_jwt():
     encoded_jwt = jwt_instance.encode(payload, signing_key, alg='RS256')
     return encoded_jwt
 
-def print_repo_details():
+def get_access_token_details():
     # Authenticate as the GitHub App
     jwt_token = generate_jwt()
-
     if jwt_token is None:
         print("Authentication failed. Check previous error messages for details.")
         return
-
     headers = {
         "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
     }
-    print("Headers:", headers)
 
     # Use the GitHub REST API to get repository information
-    repo_url = f"https://api.github.com/app/installations"
+    installation_url = f"https://api.github.com/app/installations"
     try:
-        repo_response = requests.get(repo_url, headers=headers)
-        repo_response.raise_for_status()  # Raise an error for bad responses (4xx and 5xx)
+        installation_response = requests.get(installation_url, headers=headers)
+        installation_response.raise_for_status()
         
-        if repo_response.status_code == 200:
-            repo_data = repo_response.json()
-            print(repo_data)
-            print(repo_data['access_token'])
-            # Print repository name and language
-            # print(f"Repository Name: {repo_data['name']}")
-            # print(f"Repository Language: {repo_data['language']}")
-            # print(f"Response body: {repo_response.text}")
+        if installation_response.status_code == 200:
+            installation_data = installation_response.json()
+            installation_id = installation_data['id']
+            access_token_url = f"https://api.github.com/app/installations/INSTALLATION_ID/access_tokens"
+
+            try:
+                access_token_response = requests.get(access_token_url, headers=headers)
+                access_token_response.raise_for_status()
+
+                if access_token_response.status_code == 200:
+                    access_token_data = access_token_response.json()
+                    print(access_token_data)
+            except:
+                print("Error")
         else:
-            print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
+            print(f"Failed to retrieve repository information. Status code: {installation_response.status_code}")
 
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
@@ -66,4 +69,4 @@ def print_repo_details():
 if __name__ == "__main__":
     
     # Print repository details
-    print_repo_details()
+    access_token = get_access_token_details()
