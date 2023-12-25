@@ -38,11 +38,12 @@ def get_access_token_details():
     headers = {
         "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
+        "X-GitHub-Api-Version": "2022-11-28",
     }
     access_token_url = f"https://api.github.com/app/installations/45427177/access_tokens"
 
     try:
-        access_token_response = requests.get(access_token_url, headers=headers)
+        access_token_response = requests.post(access_token_url, headers=headers)
         access_token_response.raise_for_status()
 
         if access_token_response.status_code == 200:
