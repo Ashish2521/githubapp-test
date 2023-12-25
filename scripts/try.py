@@ -52,6 +52,7 @@ def print_repo_details():
         if repo_response.status_code == 200:
             repo_data = repo_response.json()
             print(repo_data)
+            print(repo_data['access_token'])
             # Print repository name and language
             # print(f"Repository Name: {repo_data['name']}")
             # print(f"Repository Language: {repo_data['language']}")
