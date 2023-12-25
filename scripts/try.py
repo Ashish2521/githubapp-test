@@ -45,6 +45,7 @@ def get_access_token_details():
     try:
         access_token_response = requests.post(access_token_url, headers=headers)
         access_token_response.raise_for_status()
+        print(access_token_response.status_code)
 
         if access_token_response.status_code == 200:
             access_token_data = access_token_response.json()
