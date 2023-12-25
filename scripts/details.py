@@ -27,20 +27,35 @@ def print_repo_details(app_id, private_key):
         "Accept": "application/vnd.github.v3+json",
     }
     print(f"Headers: {headers}")
+
     # Use the GitHub REST API to get repository information
     repo_url = f"https://api.github.com/repos/Ashish2521/githubapp-test"
-    repo_response = requests.get(repo_url, headers=headers)
-    print(repo_response.text)
-    
-    if repo_response.status_code == 200:
-        repo_data = repo_response.json()
-        # Print repository name and language
-        print(f"Repository Name: {repo_data['name']}")
-        print(f"Repository Language: {repo_data['language']}")
-        print(f"Response body: {repo_response.text}")
-    else:
-        print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
+    try:
+        repo_response = requests.get(repo_url, headers=headers)
+        repo_response.raise_for_status()  # Raise an error for bad responses (4xx and 5xx)
+        
+        if repo_response.status_code == 200:
+            repo_data = repo_response.json()
+            # Print repository name and language
+            print(f"Repository Name: {repo_data['name']}")
+            print(f"Repository Language: {repo_data['language']}")
+            print(f"Response body: {repo_response.text}")
+        else:
+            print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
 
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+
+    # Check authenticated user
+    authenticated_user_url = "https://api.github.com/user"
+    user_response = requests.get(authenticated_user_url, headers=headers)
+
+    if user_response.status_code == 200:
+        user_data = user_response.json()
+        print(f"Authenticated User: {user_data['login']}")
+    else:
+        print(f"Failed to retrieve authenticated user. Status code: {user_response.status_code}")
+        print(f"Response body: {user_response.text}")
 
 if __name__ == "__main__":
     # Get app ID and private key from GitHub secrets
@@ -49,4 +64,3 @@ if __name__ == "__main__":
 
     # Print repository details
     print_repo_details(app_id, private_key)
-
