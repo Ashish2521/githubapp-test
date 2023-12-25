@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 from jwt import JWT, jwk_from_pem
 import time
-import sys
-import os,requests
+import os
+import requests
 
 def generate_jwt():
     # Get PEM file path
     pem = os.path.join(os.path.dirname(__file__), "private-key.pem")
 
     # Get the App ID
-    app_id = int(os.environ.get("APP_ID")) 
+    app_id = int(os.environ.get("APP_ID"))
 
     # Open PEM
     with open(pem, 'rb') as pem_file:
@@ -29,33 +29,49 @@ def generate_jwt():
     encoded_jwt = jwt_instance.encode(payload, signing_key, alg='RS256')
     return encoded_jwt
 
-def print_repo_details():
-    # Authenticate as the GitHub App
-    jwt_token = generate_jwt()
-
-    if jwt_token is None:
-        print("Authentication failed. Check previous error messages for details.")
-        return
-
+def get_installation_access_token(jwt_token):
+    installation_url = "https://api.github.com/app/installations"
     headers = {
         "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
     }
-    print("Headers:", headers)
+
+    try:
+        installation_response = requests.post(installation_url, headers=headers)
+        installation_response.raise_for_status()
+
+        if installation_response.status_code == 201:
+            installation_data = installation_response.json()
+            return installation_data.get("access_token")
+        else:
+            print(f"Failed to get installation access token. Status code: {installation_response.status_code}")
+            return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        return None
+
+def print_repo_details(access_token):
+    if access_token is None:
+        print("Failed to get installation access token. Check previous error messages for details.")
+        return
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Accept": "application/vnd.github.v3+json",
+    }
 
     # Use the GitHub REST API to get repository information
-    repo_url = f"https://api.github.com/app/installations"
+    repo_url = "https://api.github.com/repos/:owner/:repo"  # Replace with the actual repository URL
     try:
         repo_response = requests.get(repo_url, headers=headers)
-        repo_response.raise_for_status()  # Raise an error for bad responses (4xx and 5xx)
-        
+        repo_response.raise_for_status()
+
         if repo_response.status_code == 200:
             repo_data = repo_response.json()
-            print(repo_data)
-            # Print repository name and language
-            # print(f"Repository Name: {repo_data['name']}")
-            # print(f"Repository Language: {repo_data['language']}")
-            # print(f"Response body: {repo_response.text}")
+            print("Repository Details:")
+            print(f"Repository Name: {repo_data['name']}")
+            print(f"Repository Language: {repo_data['language']}")
         else:
             print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
 
@@ -63,6 +79,11 @@ def print_repo_details():
         print(f"Request failed: {e}")
 
 if __name__ == "__main__":
-    
-    # Print repository details
-    print_repo_details()
+    # Step 1: Generate JWT token
+    jwt_token = generate_jwt()
+
+    # Step 2: Get installation access token
+    access_token = get_installation_access_token(jwt_token)
+
+    # Step 3: Print repository details using the installation access token
+    print_repo_details(access_token)
