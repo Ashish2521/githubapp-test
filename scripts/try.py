@@ -44,17 +44,18 @@ def print_repo_details():
     print("Headers:", headers)
 
     # Use the GitHub REST API to get repository information
-    repo_url = f"https://api.github.com/repos/Ashish2521/githubapp-test"
+    repo_url = f"https://api.github.com/app/installations"
     try:
         repo_response = requests.get(repo_url, headers=headers)
         repo_response.raise_for_status()  # Raise an error for bad responses (4xx and 5xx)
         
         if repo_response.status_code == 200:
             repo_data = repo_response.json()
+            print(repo_data)
             # Print repository name and language
-            print(f"Repository Name: {repo_data['name']}")
-            print(f"Repository Language: {repo_data['language']}")
-            print(f"Response body: {repo_response.text}")
+            # print(f"Repository Name: {repo_data['name']}")
+            # print(f"Repository Language: {repo_data['language']}")
+            # print(f"Response body: {repo_response.text}")
         else:
             print(f"Failed to retrieve repository information. Status code: {repo_response.status_code}")
 
