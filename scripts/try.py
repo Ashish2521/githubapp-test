@@ -59,8 +59,8 @@ def get_access_token_details():
                 if access_token_response.status_code == 200:
                     access_token_data = access_token_response.json()
                     print(access_token_data)
-            except:
-                print("Error")
+            except requests.exceptions.RequestException as e:
+                print(f"Request failed: {e}")
         else:
             print(f"Failed to retrieve repository information. Status code: {installation_response.status_code}")
 
