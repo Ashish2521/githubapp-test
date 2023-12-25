@@ -43,6 +43,7 @@ def get_access_token_details():
     # Use the GitHub REST API to get repository information
     installation_url = f"https://api.github.com/app/installations"
     try:
+        app_id = int(os.environ.get("APP_ID")) 
         installation_response = requests.get(installation_url, headers=headers)
         installation_response.raise_for_status()
         
@@ -50,7 +51,7 @@ def get_access_token_details():
             installation_data = installation_response.json()
             print(installation_data[0])
             installation_id = installation_data[0]['account']['id']
-            access_token_url = f"https://api.github.com/app/installations/45427177/access_tokens"
+            access_token_url = f"https://api.github.com/app/installations/{app_id}/access_tokens"
 
             try:
                 access_token_response = requests.get(access_token_url, headers=headers)
