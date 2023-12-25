@@ -39,42 +39,53 @@ def get_access_token_details():
         "Authorization": f"Bearer {jwt_token}",
         "Accept": "application/vnd.github.v3+json",
     }
+    access_token_url = f"https://api.github.com/app/installations/45427177/access_tokens"
 
-    # Use the GitHub REST API to get repository information
-    installation_url = f"https://api.github.com/app/installations"
     try:
-        app_id = int(os.environ.get("APP_ID")) 
-        installation_response = requests.get(installation_url, headers=headers)
-        installation_response.raise_for_status()
-        
-        if installation_response.status_code == 200:
-            installation_data = installation_response.json()
-            installation_id = installation_data[0]['id']
-            print(installation_id)
-            access_token_url = f"https://api.github.com/app/installations/{installation_id}/access_tokens"
-            jwt_token = generate_jwt()
-            if jwt_token is None:
-                print("Authentication failed. Check previous error messages for details.")
-                return
-            headers = {
-                "Authorization": f"Bearer {jwt_token}",
-                "Accept": "application/vnd.github.v3+json",
-            }
+        access_token_response = requests.get(access_token_url, headers=headers)
+        access_token_response.raise_for_status()
 
-            try:
-                access_token_response = requests.get(access_token_url, headers=headers)
-                access_token_response.raise_for_status()
-
-                if access_token_response.status_code == 200:
-                    access_token_data = access_token_response.json()
-                    print(access_token_data)
-            except requests.exceptions.RequestException as e:
-                print(f"Request failed: {e}")
-        else:
-            print(f"Failed to retrieve repository information. Status code: {installation_response.status_code}")
-
+        if access_token_response.status_code == 200:
+            access_token_data = access_token_response.json()
+            print(access_token_data)
     except requests.exceptions.RequestException as e:
         print(f"Request failed: {e}")
+
+    # # Use the GitHub REST API to get repository information
+    # installation_url = f"https://api.github.com/app/installations"
+    # try:
+    #     app_id = int(os.environ.get("APP_ID")) 
+    #     installation_response = requests.get(installation_url, headers=headers)
+    #     installation_response.raise_for_status()
+        
+    #     if installation_response.status_code == 200:
+    #         installation_data = installation_response.json()
+    #         installation_id = installation_data[0]['id']
+    #         print(installation_id)
+    #         access_token_url = f"https://api.github.com/app/installations/{installation_id}/access_tokens"
+    #         jwt_token = generate_jwt()
+    #         if jwt_token is None:
+    #             print("Authentication failed. Check previous error messages for details.")
+    #             return
+    #         headers = {
+    #             "Authorization": f"Bearer {jwt_token}",
+    #             "Accept": "application/vnd.github.v3+json",
+    #         }
+
+    #         try:
+    #             access_token_response = requests.get(access_token_url, headers=headers)
+    #             access_token_response.raise_for_status()
+
+    #             if access_token_response.status_code == 200:
+    #                 access_token_data = access_token_response.json()
+    #                 print(access_token_data)
+    #         except requests.exceptions.RequestException as e:
+    #             print(f"Request failed: {e}")
+    #     else:
+    #         print(f"Failed to retrieve repository information. Status code: {installation_response.status_code}")
+
+    # except requests.exceptions.RequestException as e:
+    #     print(f"Request failed: {e}")
 
 if __name__ == "__main__":
     
