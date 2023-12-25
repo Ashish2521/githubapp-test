@@ -48,8 +48,8 @@ def get_access_token_details():
         
         if installation_response.status_code == 200:
             installation_data = installation_response.json()
-            print(installation_data)
-            installation_id = installation_data['id']
+            print(installation_data[0]['id'])
+            installation_id = installation_data[0]['id']
             access_token_url = f"https://api.github.com/app/installations/{installation_id}/access_tokens"
 
             try:
