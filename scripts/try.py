@@ -81,19 +81,16 @@ def get_repo_details(access_token, owner, repo):
         "Authorization": f"Bearer {access_token}",
         "Accept": "application/vnd.github.v3+json",
     }
-    repo_url = f"https://api.github.com/users/Ashish2521"
+    repo_url = f"https://api.github.com/users/Ashish2521/repos"
 
     try:
         repo_response = requests.get(repo_url, headers=headers)
         repo_response.raise_for_status()
 
+
         if repo_response.status_code == 200:
             repo_data = repo_response.json()
-            print(f"Repository Details:")
-            print(f"Name: {repo_data['name']}")
-            print(f"Description: {repo_data['description']}")
-            print(f"URL: {repo_data['html_url']}")
-            print(f"Created At: {repo_data['created_at']}")
+            print(repo_data)
         else:
             print(f"Failed to retrieve repository details. Status code: {repo_response.status_code}")
     except requests.exceptions.RequestException as e:
