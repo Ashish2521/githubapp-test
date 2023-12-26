@@ -84,7 +84,7 @@ def get_repo_details(access_token, owner, repo):
     repo_url = f"https://api.github.com/repos/{owner}/{repo}"
 
     try:
-        repo_response = requests.post(repo_url, headers=headers)
+        repo_response = requests.get(repo_url, headers=headers)
         repo_response.raise_for_status()
 
         if repo_response.status_code == 200:
