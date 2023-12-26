@@ -81,7 +81,7 @@ def get_repo_details(access_token, owner, repo):
         "Authorization": f"Bearer {access_token}",
         "Accept": "application/vnd.github.v3+json",
     }
-    repo_url = f"https://api.github.com/repos/{owner}/{repo}"
+    repo_url = f"https://api.github.com/repos/{owner}/tagcompliance"
 
     try:
         repo_response = requests.get(repo_url, headers=headers)
