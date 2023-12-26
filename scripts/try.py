@@ -79,9 +79,8 @@ def get_repo_details(access_token, owner, repo):
     headers = {
         "Authorization": f"Bearer {access_token}",
         "Accept": "application/vnd.github.v3+json",
-        "X-GitHub-Api-Version": "2022-11-28",
     }
-    repo_url = f"https://api.github.com/repos/{owner}/{repo}"
+    repo_url = f"https://api.github.com/repos/{owner}/tagcompliance"
 
     try:
         repo_response = requests.get(repo_url, headers=headers)
@@ -110,6 +109,7 @@ if __name__ == "__main__":
 
         # Get access token using installation ID
         access_token = get_access_token_details(installation_id, jwt_token)
+        print(f'Access token got !!!!!!!!{access_token}')
         if access_token is not None:
             print(f"Access Token: {access_token}")
 
