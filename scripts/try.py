@@ -81,7 +81,7 @@ def get_repo_details(access_token, owner, repo):
         "Authorization": f"Bearer {access_token}",
         "Accept": "application/vnd.github.v3+json",
     }
-    repo_url = f"https://api.github.com/users/Ashish2521/repos?page=1&per_page=100"
+    repo_url = f"https://api.github.com/repos/Ashish2521/githubapp-test"
 
     try:
         repo_response = requests.get(repo_url, headers=headers)
