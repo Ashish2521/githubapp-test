@@ -67,6 +67,7 @@ def get_access_token_details(installation_id, jwt_token):
 
         if access_token_response.status_code == 201:
             access_token_data = access_token_response.json()
+            print(access_token_data)
             return access_token_data.get('token')
         else:
             print(f"Failed to obtain access token. Status code: {access_token_response.status_code}")
