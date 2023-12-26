@@ -62,7 +62,7 @@ def get_access_token_details(installation_id, jwt_token):
     access_token_url = f"https://api.github.com/app/installations/{installation_id}/access_tokens"
 
     try:
-        access_token_response = requests.post(access_token_url, headers=headers)
+        access_token_response = requests.post(access_token_url, headers=headers,params={"permissions": "repo"})
         access_token_response.raise_for_status()
 
         if access_token_response.status_code == 201:
@@ -80,7 +80,7 @@ def get_repo_details(access_token, owner, repo):
         "Authorization": f"Bearer {access_token}",
         "Accept": "application/vnd.github.v3+json",
     }
-    repo_url = f"https://api.github.com/repos/{owner}/tagcompliance"
+    repo_url = f"https://api.github.com/repos/{owner}/{repo}"
 
     try:
         repo_response = requests.get(repo_url, headers=headers)
